@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agenda de Contatos</title>
+<style>
+    body 
+    
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    button {
+        margin: 5px;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        background-color: #007bff;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+
+    #contactList {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        background-color: #fff;
+        padding: 10px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+    }
+
+    li:hover {
+        background-color: #f9f9f9;
+    }
+
+    strong {
+        color: #007bff;
+    }
+
+    button.edit {
+        background-color: #ffc107;
+        color: #333;
+    }
+
+    button.delete {
+        background-color: #dc3545;
+        color: #fff;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;}
+    
+    
+    
+    
+    
+    
+    input, button {
+        margin: 5px;
+        padding: 5px;
+    }
+</style>
+</head>
+<body>
+<h1>Agenda de Contatos</h1>
+<div>
+    <input type="text" id="name" placeholder="Nome">
+    <input type="text" id="phone" placeholder="Número">
+    <input type="email" id="email" placeholder="Email">
+    <button onclick="addContact()">Adicionar Contato</button>
+</div>
+<div>
+    <ul id="contactList"></ul>
+</div>
+
+<script>
+    let contacts = [];
+
+    function addContact() {
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const email = document.getElementById("email").value;
+        const dateAdded = new Date().toLocaleString();
+        
+        if (name && phone && email) {
+            const contact = { name, phone, email, dateAdded };
+            contacts.push(contact);
+            displayContacts();
+            clearInputFields();
+        } else {
+            alert("Por favor, preencha todos os campos.");
+        }
+    }
+
+    function displayContacts() {
+        const contactList = document.getElementById("contactList");
+        contactList.innerHTML = "";
+        contacts.forEach((contact, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <strong>${contact.name}</strong> - ${contact.phone} - ${contact.email} (Adicionado em: ${contact.dateAdded})
+                <button onclick="editContact(${index})">Editar</button>
+                <button onclick="deleteContact(${index})">Excluir</button>
+            `;
+            contactList.appendChild(li);
+        });
+    }
+
+    function editContact(index) {
+        const contact = contacts[index];
+        const newName = prompt("Novo nome:", contact.name);
+        const newPhone = prompt("Novo número:", contact.phone);
+        const newEmail = prompt("Novo email:", contact.email);
+
+        if (newName && newPhone && newEmail) {
+            contacts[index] = { name: newName, phone: newPhone, email: newEmail, dateAdded: contact.dateAdded };
+            displayContacts();
+        } else {
+            alert("Por favor, preencha todos os campos.");
+        }
+    }
+
+    function deleteContact(index) {
+        contacts.splice(index, 1);
+        displayContacts();
+    }
+
+    function clearInputFields() {
+        document.getElementById("name").value = "";
+        document.getElementById("phone").value = "";
+        document.getElementById("email").value = "";
+    }
+
+    displayContacts();
+</script>
+</body>
+</html>
